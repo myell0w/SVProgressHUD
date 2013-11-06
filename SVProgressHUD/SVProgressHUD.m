@@ -538,8 +538,9 @@ CGFloat SVProgressHUDRingThickness = 6;
     
     if(![self.class isVisible])
         [self.class show];
-    
-    self.imageView.image = image;
+
+    self.imageView.tintColor = self.hudForegroundColor;
+    self.imageView.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.imageView.hidden = NO;
     
     self.stringLabel.text = string;
@@ -725,19 +726,7 @@ CGFloat SVProgressHUDRingThickness = 6;
 
 - (UIView *)hudView {
     if(!hudView) {
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-        hudView = [[UIToolbar alloc] initWithFrame:CGRectZero];
-        ((UIToolbar *)hudView).translucent = YES;
-        ((UIToolbar *)hudView).barTintColor = self.hudBackgroundColor;
-#else
         hudView = [[UIView alloc] initWithFrame:CGRectZero];
-        
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 50000
-        
-        // UIAppearance is used when iOS >= 5.0
-		hudView.backgroundColor = self.hudBackgroundColor;
-#endif
-#endif
 
         hudView.layer.cornerRadius = 10;
         hudView.layer.masksToBounds = YES;
@@ -747,6 +736,9 @@ CGFloat SVProgressHUDRingThickness = 6;
         
         [self addSubview:hudView];
     }
+    // UIAppearance is used when iOS >= 5.0
+    hudView.backgroundColor = self.hudBackgroundColor;
+
     return hudView;
 }
 
@@ -762,17 +754,12 @@ CGFloat SVProgressHUDRingThickness = 6;
 #endif
         
 		stringLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-
-        // UIAppearance is used when iOS >= 5.0
-		stringLabel.textColor = self.hudForegroundColor;
-		stringLabel.font = self.hudFont;
-        
-#if __IPHONE_OS_VERSION_MIN_REQUIRED < 70000
-		stringLabel.shadowColor = self.hudStatusShadowColor;
-		stringLabel.shadowOffset = CGSizeMake(0, -1);
-#endif
         stringLabel.numberOfLines = 0;
     }
+
+    // UIAppearance is used when iOS >= 5.0
+    stringLabel.textColor = self.hudForegroundColor;
+    stringLabel.font = self.hudFont;
     
     if(!stringLabel.superview)
         [self.hudView addSubview:stringLabel];
@@ -795,11 +782,11 @@ CGFloat SVProgressHUDRingThickness = 6;
         spinnerView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 		spinnerView.hidesWhenStopped = YES;
 		spinnerView.bounds = CGRectMake(0, 0, 37, 37);
-        
-        if([spinnerView respondsToSelector:@selector(setColor:)]) // setColor is iOS 5+
-            spinnerView.color = self.hudForegroundColor;
     }
-    
+
+    if([spinnerView respondsToSelector:@selector(setColor:)]) // setColor is iOS 5+
+        spinnerView.color = self.hudForegroundColor;
+
     if(!spinnerView.superview)
         [self.hudView addSubview:spinnerView];
     
@@ -827,8 +814,6 @@ CGFloat SVProgressHUDRingThickness = 6;
 #pragma mark - UIAppearance getters
 
 - (UIColor *)hudBackgroundColor {
-    
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 50000
     if(_uiHudBgColor == nil) {
         _uiHudBgColor = [[[self class] appearance] hudBackgroundColor];
     }
@@ -836,17 +821,11 @@ CGFloat SVProgressHUDRingThickness = 6;
     if(_uiHudBgColor != nil) {
         return _uiHudBgColor;
     }
-#endif
-    
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-    return [UIColor whiteColor];
-#else
+
     return [UIColor colorWithWhite:0 alpha:0.8];
-#endif
 }
 
 - (UIColor *)hudForegroundColor {
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 50000
     if(_uiHudFgColor == nil) {
         _uiHudFgColor = [[[self class] appearance] hudForegroundColor];
     }
@@ -854,13 +833,8 @@ CGFloat SVProgressHUDRingThickness = 6;
     if(_uiHudFgColor != nil) {
         return _uiHudFgColor;
     }
-#endif
-    
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-    return [UIColor colorWithWhite:0 alpha:0.8];
-#else
+
     return [UIColor whiteColor];
-#endif
 }
 
 - (UIColor *)hudRingBackgroundColor {
