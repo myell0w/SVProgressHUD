@@ -324,6 +324,9 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 - (void)setStatus:(NSString *)string {
     
 	self.stringLabel.text = string;
+    self.stringLabel.textColor = SVProgressHUDForegroundColor;
+    self.stringLabel.font = SVProgressHUDFont;
+
     [self updatePosition];
     
 }
@@ -486,6 +489,8 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
     self.progress = progress;
     
     self.stringLabel.text = string;
+    self.stringLabel.textColor = SVProgressHUDForegroundColor;
+    self.stringLabel.font = SVProgressHUDFont;
     [self updatePosition];
     
     if(progress >= 0) {
@@ -569,6 +574,8 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
     self.imageView.hidden = NO;
     
     self.stringLabel.text = string;
+    self.stringLabel.textColor = SVProgressHUDForegroundColor;
+    self.stringLabel.font = SVProgressHUDFont;
     [self updatePosition];
     [self.indefiniteAnimatedLayer removeFromSuperlayer];
     
@@ -824,8 +831,6 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 		_stringLabel.adjustsFontSizeToFitWidth = YES;
         _stringLabel.textAlignment = NSTextAlignmentCenter;
 		_stringLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-		_stringLabel.textColor = SVProgressHUDForegroundColor;
-		_stringLabel.font = SVProgressHUDFont;
         _stringLabel.numberOfLines = 0;
     }
     
