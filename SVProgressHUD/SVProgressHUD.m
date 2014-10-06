@@ -255,6 +255,12 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
             
             break;
         }
+
+        case SVProgressHUDMaskTypeClear:
+        case SVProgressHUDMaskTypeNone: {
+            // do nothing
+            break;
+        }
     }
 }
 
